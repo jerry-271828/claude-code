@@ -1,6 +1,6 @@
 {
   "name": "@jerry-271828/claude-code",
-  "version": "2.1.201-ohos.1",
+  "version": "2.1.201-ohos.2",
   "description": "HarmonyOS PC (OpenHarmony) launcher for Claude Code. Uses @cometix/claude-code under the hood and applies OHOS-specific startup fixes.",
   "bin": {
     "claude": "bin/claude.mjs"
@@ -9,17 +9,22 @@
   "dependencies": {
     "@cometix/claude-code": "^2.1.201"
   },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.mjs"
+  },
   "engines": {
     "node": ">=22.0.0"
   },
   "os": [
-    "linux"
+    "linux",
+    "openharmony"
   ],
   "cpu": [
     "arm64"
   ],
   "files": [
     "bin/",
+    "scripts/",
     "README.md"
   ],
   "keywords": [
