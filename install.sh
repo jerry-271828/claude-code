@@ -59,20 +59,37 @@ cd "$INSTALL_DIR"
 echo "==> Running @jerry-271828/claude-code postinstall..."
 node scripts/postinstall.mjs || true
 
-# Link into global PATH
-echo "==> Linking claude command..."
-if npm link 2>/dev/null; then
-  echo "    Linked."
-else
-  echo "WARNING: npm link failed. Add this to your PATH manually:"
-  echo "  export PATH=\"$INSTALL_DIR/bin:\$PATH\""
-  echo "Or add to ~/.zshrc:"
-  echo "  echo 'export PATH=\"$INSTALL_DIR/bin:\$PATH\"' >> ~/.zshrc"
-  exit 1
+# Register the `claude` command.
+# OHOS kernel requires code signatures on every exec'd file — even shebang
+# scripts. We can't create an executable claude.js and have it work.
+# The workaround: add a shell alias that runs `node <script>`.
+# `node` is signed (installed by harmonybrew); our .mjs file is just an
+# argument to it, not exec'd directly.
+CLAUDE_SCRIPT="$INSTALL_DIR/bin/claude.mjs"
+ALIAS_LINE="alias claude='node $CLAUDE_SCRIPT'"
+ZSHRC="$HOME/.zshrc"
+
+echo "==> Registering claude command..."
+
+# Remove any previous alias line
+if [ -f "$ZSHRC" ]; then
+  sed -i '/^alias claude=.claude-code-ohos/d' "$ZSHRC"
 fi
+
+echo "$ALIAS_LINE" >> "$ZSHRC"
+echo "    Added alias to ~/.zshrc"
+
+# Also make it available in the current shell
+eval "$ALIAS_LINE"
+
+# Clean up previous npm link if present
+npm rm -g @jerry-271828/claude-code 2>/dev/null || true
 
 echo ""
 echo "==> Done! Run: claude"
+echo ""
+echo "    (If 'claude' is not found, open a new terminal or run:"
+echo "     source ~/.zshrc)"
 echo ""
 echo "    First launch will download ~8MB of platform files."
 echo "    Subsequent launches skip straight to Claude Code."
