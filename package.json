@@ -1,0 +1,40 @@
+{
+  "name": "@jerry-271828/claude-code",
+  "version": "2.1.201-ohos.0",
+  "description": "HarmonyOS PC (OpenHarmony) launcher for Claude Code. Uses @cometix/claude-code under the hood and applies OHOS-specific startup fixes.",
+  "bin": {
+    "claude": "bin/claude.mjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "@cometix/claude-code": "2.1.201"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "files": [
+    "bin/",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "harmonyos",
+    "openharmony",
+    "ohos",
+    "arm64_ohos"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jerry-271828/claude-code.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
