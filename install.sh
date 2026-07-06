@@ -73,7 +73,7 @@ echo "==> Registering claude command..."
 
 # Remove any previous alias line
 if [ -f "$ZSHRC" ]; then
-  sed -i '/^alias claude=.claude-code-ohos/d' "$ZSHRC"
+  sed -i '/^alias claude=.*claude-code-ohos/d' "$ZSHRC"
 fi
 
 echo "$ALIAS_LINE" >> "$ZSHRC"
