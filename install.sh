@@ -59,6 +59,20 @@ cd "$INSTALL_DIR"
 echo "==> Running @jerry-271828/claude-code postinstall..."
 node scripts/postinstall.mjs || true
 
+# Compile node-pty.
+# npm postinstall scripts use `sh` which OHOS can't spawn (ENOENT), so
+# --ignore-scripts skips node-pty's native build. We run node-gyp directly.
+echo "==> Compiling node-pty..."
+if command -v make >/dev/null 2>&1 && command -v g++ >/dev/null 2>&1; then
+  if [ -d "$INSTALL_DIR/node_modules/node-pty" ]; then
+    (cd "$INSTALL_DIR/node_modules/node-pty" && npm exec node-gyp rebuild) || \
+      echo "    Compile failed — PTY features won't be available."
+  fi
+else
+  echo "    Skipped (g++/make not found). For PTY terminal support:"
+  echo "      brew install devel-base"
+fi
+
 # Register the `claude` command.
 # OHOS kernel requires code signatures on every exec'd file — even shebang
 # scripts. We can't create an executable claude.js and have it work.

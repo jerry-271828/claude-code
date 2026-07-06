@@ -11,11 +11,17 @@
 
 前提:已安装 [Harmonybrew](https://atomgit.com/Harmonybrew) + Node.js ≥ 22 + ripgrep。
 
-```sh
-brew install ripgrep   # 如果没有的话
+推荐同时安装构建工具(使能 PTY 终端支持):
 
+```sh
+brew install devel-base ripgrep   # 首次安装
+```
+
+```sh
 curl -fsSL https://raw.githubusercontent.com/jerry-271828/claude-code/main/install.sh | sh && source ~/.zshrc
 ```
+
+如果不装 `devel-base`,安装脚本会跳过 node-pty 编译,Claude Code 基本功能不受影响。
 
 然后直接:
 
@@ -45,7 +51,6 @@ cd ~/.claude-code-ohos && sh install.sh
 
 | 限制 | 原因 |
 | --- | --- |
-| `node-pty` 无法编译 | npm 在 OHOS 上 spawn `sh` 报 ENOENT(node-gyp 依赖),PTY 功能不可用 |
 | seccomp 沙箱不可用 | musl 平台包的 `apply-seccomp` 为非 PIE 二进制,鸿蒙内核拒绝执行 |
 | 无 audio/image 原生模块 | musl 平台包不含 image-processor/audio-capture .node |
 | 绑定 2.1.201 | 跟随 `@cometix/claude-code` 的最新版,自动更新已禁用(新官方版无 JS 入口) |
