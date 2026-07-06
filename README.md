@@ -33,17 +33,24 @@ cd ~/.claude-code-ohos
 sh install.sh
 ```
 
+`sh install.sh` 交互运行时会在结束时自动 `exec zsh -l` 重启 shell,退出后 `claude` 即可用。
+
 ### 更新
 
 ```sh
 cd ~/.claude-code-ohos && sh install.sh
 ```
 
-或直接用 git:
+## 已知限制(鸿蒙)
 
-```sh
-cd ~/.claude-code-ohos && git pull && npm install --ignore-scripts
-```
+| 限制 | 原因 |
+| --- | --- |
+| `node-pty` 无法编译 | npm 在 OHOS 上 spawn `sh` 报 ENOENT(node-gyp 依赖),PTY 功能不可用 |
+| seccomp 沙箱不可用 | musl 平台包的 `apply-seccomp` 为非 PIE 二进制,鸿蒙内核拒绝执行 |
+| 无 audio/image 原生模块 | musl 平台包不含 image-processor/audio-capture .node |
+| 绑定 2.1.201 | 跟随 `@cometix/claude-code` 的最新版,自动更新已禁用(新官方版无 JS 入口) |
+
+以上均不影响 Claude Code 的对话和代码编辑核心功能。
 
 ## 它做了什么
 
@@ -61,9 +68,14 @@ cd ~/.claude-code-ohos && git pull && npm install --ignore-scripts
 启动垫片在首次运行时下载匹配版本的 linux-arm64-musl 平台包,完成 cli.js
 和 vendor/ 的部署,之后缓存复用。
 
+鸿蒙内核要求所有 `execve` 的文件有 `.codesign` 签名(包括 shebang 脚本),
+因此通过 `~/.zshrc` 里的 shell alias(`alias claude='node ...'`)
+来启动——`node` 由 harmonybrew 安装并已签名,`.mjs` 只是参数,不需签名。
+
 ## 卸载
 
 ```sh
 rm -rf ~/.claude-code-ohos
-npm rm -g @jerry-271828/claude-code 2>/dev/null || true
+sed -i '/claude-code-ohos/d' ~/.zshrc
+source ~/.zshrc
 ```
