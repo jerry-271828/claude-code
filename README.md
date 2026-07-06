@@ -14,10 +14,10 @@
 ```sh
 brew install ripgrep   # 如果没有的话
 
-curl -fsSL https://raw.githubusercontent.com/jerry-271828/claude-code/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/jerry-271828/claude-code/main/install.sh | sh && source ~/.zshrc
 ```
 
-装完直接:
+然后直接:
 
 ```sh
 claude

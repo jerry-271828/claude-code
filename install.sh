@@ -86,10 +86,15 @@ eval "$ALIAS_LINE"
 npm rm -g @jerry-271828/claude-code 2>/dev/null || true
 
 echo ""
-echo "==> Done! Run: claude"
-echo ""
-echo "    (If 'claude' is not found, open a new terminal or run:"
-echo "     source ~/.zshrc)"
-echo ""
+echo "==> Done!"
 echo "    First launch will download ~8MB of platform files."
-echo "    Subsequent launches skip straight to Claude Code."
+
+if [ -t 0 ]; then
+  # Running interactively (sh install.sh) — restart shell with alias active.
+  echo ""
+  exec zsh -l
+else
+  # Piped from curl — can't replace parent shell. Print instructions.
+  echo "    Run: source ~/.zshrc   (or open a new terminal)"
+  echo "    Then: claude"
+fi
