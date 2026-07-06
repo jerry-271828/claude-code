@@ -20,7 +20,7 @@
    ```
 
 ```sh
-npm i -g @jerry-271828/claude-code
+npm i -g github:jerry-271828/claude-code
 claude
 ```
 
